@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id        Int   @id @default(autoincrement())
   email     String   @unique
   name      String
   password  String
@@ -42,7 +42,7 @@ model Share {
   post      Post     @relation("Shares", fields: [postId], references: [id])
   postId    String
   user      User     @relation("Shares", fields: [userId], references: [id])
-  userId    String
+  userId    Int
   sharedAt  DateTime @default(now())
   comment   String
 }
@@ -52,7 +52,7 @@ model Comment {
   post      Post     @relation("Comments", fields: [postId], references: [id])
   postId    String
   user      User     @relation("Comments", fields: [userId], references: [id])
-  userId    String
+  userId    Int
   commentAt DateTime @default(now())
   comment   String
   likedBy   User[] @relation("CommentsLikes")
@@ -66,7 +66,7 @@ model Post {
   image     String
   createdAt DateTime @default(now())
   author    User     @relation("Publish", fields: [authorId], references: [id])
-  authorId  String
+  authorId  Int
   likedBy   User[] @relation("Likes")
 
   Share Share[] @relation("Shares")
