@@ -20,11 +20,10 @@ model User {
   password  String
   gender    String
   bornData  DateTime
-  folllowers User[] @relation("Followers")
+  follows    User[] @relation("Followers")
+  followedBy User[] @relation("Followers")
   publish    Post[] @relation("Publish")
   like       Post[] @relation("Likes")
-
-  User User[] @relation("Followers")
 
   Share Share[] @relation("Shares")
 
@@ -63,7 +62,7 @@ model Post {
   id        String   @id @default(cuid())
   title     String
   content   String
-  image     String
+  image     String?
   createdAt DateTime @default(now())
   author    User     @relation("Publish", fields: [authorId], references: [id])
   authorId  Int
