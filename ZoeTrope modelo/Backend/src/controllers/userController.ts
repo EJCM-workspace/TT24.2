@@ -110,6 +110,122 @@ class userController {
             return res.status(500).json({ error: error });
         }
     }
+
+    async follow(req: Request, res: Response) {
+        try {
+            const { userId } = req.params;
+            const { followId } = req.body;
+            const user = await prisma.user.findUnique({
+                where: {
+                    id: Number(userId)
+                }
+            });
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+            const followed = await prisma.user.findUnique({
+                where: {
+                    id: Number(followId)
+                }
+            });
+            if (!followed) {
+                return res.status(404).json({ error: 'Follow not found' });
+            }
+            const followUser = await prisma.user.update({
+                where: {
+                    id: Number(user.id)
+                },
+                data: {
+                    follows: {
+                        connect: {
+                            id: Number(followed.id)
+                        }
+                    }
+                }
+            });
+            return res.status(200).json(followUser);
+        } catch (error) {
+            return res.status(500).json({ error: error });
+        }
+    }
+
+    async unfollow(req: Request, res: Response) {
+        try {
+            const { userId } = req.params;
+            const { followId } = req.body;
+            const user = await prisma.user.findUnique({
+                where: {
+                    id: Number(userId)
+                }
+            });
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+            const followed = await prisma.user.findUnique({
+                where: {
+                    id: Number(followId)
+                }
+            });
+            if (!followed) {
+                return res.status(404).json({ error: 'Follow not found' });
+            }
+            const unfollowUser = await prisma.user.update({
+                where: {
+                    id: Number(user.id)
+                },
+                data: {
+                    follows: {
+                        disconnect: {
+                            id: Number(followed.id)
+                        }
+                    }
+                }
+            });
+            return res.status(200).json(unfollowUser);
+        } catch (error) {
+            return res.status(500).json({ error: error });
+        }
+    }
+
+    async showFollowers(req: Request, res: Response) {
+        try {
+            const { userId } = req.params;
+            const user = await prisma.user.findUnique({
+                where: {
+                    id: Number(userId)
+                },
+                include: {
+                    followedBy: true
+                }
+            });
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+            return res.status(200).json(user);
+        } catch (error) {
+            return res.status(500).json({ error: error });
+        }
+    }
+
+    async showFollowing(req: Request, res: Response) {
+        try {
+            const { userId } = req.params;
+            const user = await prisma.user.findUnique({
+                where: {
+                    id: Number(userId)
+                },
+                include: {
+                    follows: true
+                }
+            });
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+            return res.status(200).json(user);
+        } catch (error) {
+            return res.status(500).json({ error: error });
+        }
+    }
 }
 
 export default new userController();
