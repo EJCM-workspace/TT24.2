@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "front",
+    "slug": "front",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/zoeTrope.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./src/assets/zoeTrope.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/zoeTrope.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./src/assets/zoeTrope.png",
+      "bundler": "metro"
+    }
+  }
+}

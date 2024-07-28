@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int   @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String
+  gender    String
+  bornData  DateTime
+  follows    User[] @relation("Followers")
+  followedBy User[] @relation("Followers")
+  publish    Post[] @relation("Publish")
+  like       Post[] @relation("Likes")
+
+  Share Share[] @relation("Shares")
+
+  Comment Comment[] @relation("Comments")
+
+  LikesInComments Comment[] @relation("CommentsLikes")
+
+  ReplysInComments Comment[] @relation("Replies")
+
+  @@map("users")
+}
+
+model Share {
+  id        String   @id @default(cuid())
+  post      Post     @relation("Shares", fields: [postId], references: [id])
+  postId    String
+  user      User     @relation("Shares", fields: [userId], references: [id])
+  userId    Int
+  sharedAt  DateTime @default(now())
+  comment   String
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  post      Post     @relation("Comments", fields: [postId], references: [id])
+  postId    String
+  user      User     @relation("Comments", fields: [userId], references: [id])
+  userId    Int
+  commentAt DateTime @default(now())
+  comment   String
+  likedBy   User[] @relation("CommentsLikes")
+  replys     User[] @relation("Replies")
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  image     String?
+  createdAt DateTime @default(now())
+  author    User     @relation("Publish", fields: [authorId], references: [id])
+  authorId  Int
+  likedBy   User[] @relation("Likes")
+
+  Share Share[] @relation("Shares")
+
+  Comment Comment[] @relation("Comments")
+
+  @@map("posts")
+}
