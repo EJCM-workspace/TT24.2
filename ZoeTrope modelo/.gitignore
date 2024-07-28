@@ -1,4 +1,0 @@
-Backend/.env
-Backend/*.priv.pem
-Backend/node_modules/
-Backend/src/models/migrations/
