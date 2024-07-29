@@ -1,20 +1,18 @@
-import { SignUpView } from "./style";
+import { SignupView, ZoeTropeLogoView } from "./style";
 import ZoeTropeLogo from '../../assets/ZoeTropeLogo.svg';
-import { InputboxTitle, ZoeTropeLogoView } from "../../components/inputBox/style";
+import InputBox from "../../components/inputBox";
 
-type InputBoxInfo = {
-    title: string;
-    isVisible: boolean;
-    password?: boolean;
-}
-
-export default function SignUp(InputBoxInfo: InputBoxInfo) {
+export default function SignUp() {
     return (
-        <SignUpView>
+        <SignupView>
             <ZoeTropeLogoView>
-                <ZoeTropeLogo/>
+                <ZoeTropeLogo width='83.33%' height='83.33%'/>
             </ZoeTropeLogoView>
-            <InputboxTitle>Título</InputboxTitle>
-        </SignUpView>
+
+            <InputBox title="Nome" variation="normal" placeholder="Insira seu nome"/>
+            <InputBox title="Email" variation="normal" placeholder="exemplo@email.com"/>
+            <InputBox title="Senha" variation="password" placeholder="Digite a sua senha"/>
+            <InputBox title="Repetir Senha" variation="password" placeholder="Repita sua senha"/>
+        </SignupView>
     );
 }

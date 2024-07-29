@@ -21,8 +21,7 @@
       }
     },
     "web": {
-      "favicon": "./src/assets/zoeTrope.png",
-      "bundler": "metro"
+      "favicon": "./src/assets/zoeTrope.png"
     }
   }
 }
