@@ -1,4 +1,4 @@
 Backend/.env
-Backend/*.priv.pem
+Backend/id_rsa_priv.pem
 Backend/node_modules/
 Backend/src/models/migrations/

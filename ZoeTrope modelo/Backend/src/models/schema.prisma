@@ -15,15 +15,16 @@ datasource db {
 
 model User {
   id        Int   @id @default(autoincrement())
-  email     String   @unique
+  email     String
   name      String
-  password  String
+  hash      String
+  salt      String
   gender    String
   bornData  DateTime
   follows    User[] @relation("Followers")
   followedBy User[] @relation("Followers")
   publish    Post[] @relation("Publish")
-  like       Post[] @relation("Likes")
+  like       Likes[] @relation("Likes")
 
   Share Share[] @relation("Shares")
 
@@ -39,7 +40,7 @@ model User {
 model Share {
   id        String   @id @default(cuid())
   post      Post     @relation("Shares", fields: [postId], references: [id])
-  postId    String
+  postId    Int
   user      User     @relation("Shares", fields: [userId], references: [id])
   userId    Int
   sharedAt  DateTime @default(now())
@@ -49,7 +50,7 @@ model Share {
 model Comment {
   id        String   @id @default(cuid())
   post      Post     @relation("Comments", fields: [postId], references: [id])
-  postId    String
+  postId    Int
   user      User     @relation("Comments", fields: [userId], references: [id])
   userId    Int
   commentAt DateTime @default(now())
@@ -58,15 +59,23 @@ model Comment {
   replys     User[] @relation("Replies")
 }
 
+model Likes {
+  UserLiked  User  @relation("Likes", fields: [userId], references: [id])
+  userId  Int
+  PostLiked Post  @relation("Likes", fields: [postId], references: [id])
+  postId  Int
+  @@id([userId, postId])
+}
+
 model Post {
-  id        String   @id @default(cuid())
+  id        Int   @id @default(autoincrement())
   title     String
   content   String
   image     String?
   createdAt DateTime @default(now())
   author    User     @relation("Publish", fields: [authorId], references: [id])
   authorId  Int
-  likedBy   User[] @relation("Likes")
+  likedBy   Likes[] @relation("Likes")
 
   Share Share[] @relation("Shares")
 

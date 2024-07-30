@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Prisma, PrismaClient } from '@prisma/client';
+import auth from '../config/auth';
 
 const prisma = new PrismaClient();
 
@@ -10,17 +11,21 @@ class userController {
             const [day, month, year] = bornData.split('/');
             console.log(day, month, year);
             const bornDataFormat = new Date(`${year}-${month}-${day}`);
+            const { hash, salt } = auth.generatePassword(password);
             const UserInput: Prisma.UserCreateInput = {
                 name: name,
                 email: email,
-                password: password,
+                hash: hash,
+                salt: salt,
                 gender: gender,
                 bornData: bornDataFormat,
             };
             const user = await prisma.user.create({
                 data: UserInput
             });
-            return res.status(201).json(user);
+
+            const token = auth.generateJWT(user);
+            return res.status(201).json({ user: user, token: token });
         } catch (error) {
             return res.status(500).json({ error: error });
         }
@@ -99,7 +104,7 @@ class userController {
 
     async delete(req: Request, res: Response) {
         try {
-            const { id } = req.params;
+            const id = req.user;
             const user = await prisma.user.delete({
                 where: {
                     id: Number(id)
